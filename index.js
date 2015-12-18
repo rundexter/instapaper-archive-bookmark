@@ -4,8 +4,11 @@ var Instapaper = require('instapaper'),
 
 var apiUrl = 'https://www.instapaper.com/api/1.1';
 
-var outputsPickResult = {
-    'bookmarks': 'bookmarks'
+var pickOutputs = {
+    'bookmark_id': 'bookmark_id',
+    'title': 'title',
+    'url': 'url',
+    'description': 'description'
 };
 
 module.exports = {
@@ -60,7 +63,7 @@ module.exports = {
         client.setUserCredentials(auth.user, auth.pass);
         client.bookmarks.archive(bookmarkId).then(function(bookmarks) {
 
-            this.complete({bookmarks: bookmarks});
+            this.complete(util.pickResult(_.isArray(bookmarks)? _.first(bookmarks): bookmarks, pickOutputs));
         }.bind(this)).catch(function(err) {
 
             this.fail(err);

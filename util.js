@@ -98,7 +98,7 @@ module.exports = {
                     _.set(retVal, locKeyName, _(locOnceVal).toString().trim());
 
                 else if (attrSetName.type === 'boolean')
-                    _.set(retVal, locKeyName, _(locOnceVal).toString().toLowerCase() === true);
+                    _.set(retVal, locKeyName, _(locOnceVal).toString().toLowerCase() === 'true');
 
                 else if (attrSetName.type === 'integer')
                     _.set(retVal, locKeyName, _.parseInt(locOnceVal));

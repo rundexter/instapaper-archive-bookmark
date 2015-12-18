@@ -12,8 +12,20 @@
     //Required. Outputs the module emits.
     "outputs": [
         {
-            "id": "bookmarks",
-            "title":"Bookmark"
+            "id": "bookmark_id",
+            "title":"Bookmark ID"
+        },
+        {
+            "id": "title",
+            "title":"Title"
+        },
+        {
+            "id": "url",
+            "title":"Url"
+        },
+        {
+            "id": "description",
+            "title":"Description"
         }
     ],
     "icon": "dex-instapaper",
