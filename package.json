@@ -1,12 +1,13 @@
 {
-    "name": "instapaper-archive-bookmark",
-    "version": "0.0.1",
-    "description": "",
-    "main": "index.js",
-    "author": "Alexander",
-    "license": "ISC",
-    "private": true,
-    "dependencies": {
-        "lodash": "^3.9.3"
-    }
+  "name": "instapaper-archive-bookmark",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "author": "Alexander",
+  "license": "ISC",
+  "private": true,
+  "dependencies": {
+    "instapaper": "^1.0.0",
+    "lodash": "^3.10.1"
+  }
 }
