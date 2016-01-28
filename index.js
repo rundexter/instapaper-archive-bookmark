@@ -54,10 +54,12 @@ module.exports = {
             bookmarkIds = step.input('bookmark_id').toArray(),
             connections = [];
 
-        if (_.isEmpty(bookmarkIds)) 
-            return this.fail('A [bookmark_id] inputs need for this module.');
 
         console.log(step.inputs());
+
+        
+        if (_.isEmpty(bookmarkIds)) 
+            return this.fail('A [bookmark_id] inputs need for this module.');
         
         // client.setUserCredentials(auth.user, auth.pass);
         // connections = _.map(bookmarkIds, function (bookmarkId) {
