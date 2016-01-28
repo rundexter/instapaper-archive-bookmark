@@ -72,13 +72,7 @@ module.exports = {
         });
 
         q.all(connections).then(function(results) {
-            this.complete(results.reduce(function(result, currentObject) {
-                for(var key in currentObject) {
-                    if (currentObject.hasOwnProperty(key)) 
-                        result[key] = (result[key] || []).concat([currentObject[key]]);
-                }
-                return result;
-            }, {}))
+            this.complete(results)
         }.bind(this)).fail(this.fail.bind(this));
     }
 };
