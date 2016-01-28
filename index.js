@@ -1,5 +1,6 @@
 var Instapaper = require('instapaper'),
     _ = require('lodash'),
+    q = require('q');
     util = require('./util.js');
 
 var apiUrl = 'https://www.instapaper.com/api/1.1';
@@ -50,23 +51,34 @@ module.exports = {
 
         var auth = this.authModule(dexter),
             client = Instapaper(auth.consumerKey, auth.consumerSecret, {apiUrl: apiUrl}),
-            bookmarkId = step.input('bookmark_id').first();
+            bookmarkIds = step.input('bookmark_id').toArray(),
+            connections = [];
 
-        if (bookmarkId) {
-
-            bookmarkId = _(bookmarkId).toString().trim();
-        } else {
-
+        if (_.isEmpty(bookmarkIds)) 
             return this.fail('A [bookmark_id] inputs need for this module.');
-        }
-
+        
         client.setUserCredentials(auth.user, auth.pass);
-        client.bookmarks.archive(bookmarkId).then(function(bookmarks) {
+        connections = _.map(bookmarkIds, function (bookmarkId) {
+            var deferred = q.defer(),
+                bookmarkId = _(bookmarkId).toString().trim();
+            
+            client.bookmarks.archive(bookmarkId).then(function(bookmarks) {
+                deferred.resolve(util.pickResult(_.isArray(bookmarks)? _.first(bookmarks): bookmarks, pickOutputs));
+            }.bind(this)).catch(function (errors) {
+                deferred.reject(errors);
+            });
 
-            this.complete(util.pickResult(_.isArray(bookmarks)? _.first(bookmarks): bookmarks, pickOutputs));
-        }.bind(this)).catch(function(err) {
+            return deferred.promise;
+        });
 
-            this.fail(err);
-        }.bind(this));
+        q.all(connections).then(function(results) {
+            this.complete(results.reduce(function(result, currentObject) {
+                for(var key in currentObject) {
+                    if (currentObject.hasOwnProperty(key)) 
+                        result[key] = (result[key] || []).concat([currentObject[key]]);
+                }
+                return result;
+            }, {}))
+        }.bind(this)).fail(this.fail.bind(this));
     }
 };

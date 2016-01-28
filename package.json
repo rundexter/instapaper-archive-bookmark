@@ -8,6 +8,7 @@
   "private": true,
   "dependencies": {
     "instapaper": "^1.0.0",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "q": "^1.4.1"
   }
 }
