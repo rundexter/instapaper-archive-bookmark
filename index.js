@@ -56,23 +56,25 @@ module.exports = {
 
         if (_.isEmpty(bookmarkIds)) 
             return this.fail('A [bookmark_id] inputs need for this module.');
+
+        console.log(bookmarkIds);
         
-        client.setUserCredentials(auth.user, auth.pass);
-        connections = _.map(bookmarkIds, function (bookmarkId) {
-            var deferred = q.defer(),
-                bookmarkId = _(bookmarkId).toString().trim();
+        // client.setUserCredentials(auth.user, auth.pass);
+        // connections = _.map(bookmarkIds, function (bookmarkId) {
+        //     var deferred = q.defer(),
+        //         bookmarkId = _(bookmarkId).toString().trim();
             
-            client.bookmarks.archive(bookmarkId).then(function(bookmarks) {
-                deferred.resolve(util.pickResult(_.isArray(bookmarks)? _.first(bookmarks): bookmarks, pickOutputs));
-            }.bind(this)).catch(function (errors) {
-                deferred.reject(errors);
-            });
+        //     client.bookmarks.archive(bookmarkId).then(function(bookmarks) {
+        //         deferred.resolve(util.pickResult(_.isArray(bookmarks)? _.first(bookmarks): bookmarks, pickOutputs));
+        //     }.bind(this)).catch(function (errors) {
+        //         deferred.reject(errors);
+        //     });
 
-            return deferred.promise;
-        });
+        //     return deferred.promise;
+        // });
 
-        q.all(connections).then(function(results) {
-            this.complete(results)
-        }.bind(this)).fail(this.fail.bind(this));
+        // q.all(connections).then(function(results) {
+        //     this.complete(results)
+        // }.bind(this)).fail(this.fail.bind(this));
     }
 };
