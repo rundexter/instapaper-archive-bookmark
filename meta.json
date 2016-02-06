@@ -3,31 +3,12 @@
  */
 {
     //Required. Inputs the module expects.
-    "inputs": [
-        {
-            "id": "bookmark_id",
-            "title":"Bookmark ID"
-        }
-    ],
+    "inputs": [{
+        "id": "bookmark_id",
+        "title":"Bookmark ID"
+    }],
     //Required. Outputs the module emits.
-    "outputs": [
-        {
-            "id": "bookmark_id",
-            "title":"Bookmark ID"
-        },
-        {
-            "id": "title",
-            "title":"Title"
-        },
-        {
-            "id": "url",
-            "title":"Url"
-        },
-        {
-            "id": "description",
-            "title":"Description"
-        }
-    ],
+    "outputs": [],
     "icon": "dex-instapaper",
     "title": "Instapaper Archive Bookmark" /* Required.A display name for the module */
 }

@@ -62,7 +62,7 @@ module.exports = _.merge({
              * You should update this section with some test input for testing your module
              */
             input: {
-                bookmark_id: ['668403604','666893739']
+                bookmark_id: ['686851361', '638315689']
             }
         }
     }

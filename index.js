@@ -1,7 +1,8 @@
-var Instapaper = require('instapaper'),
-    _ = require('lodash'),
-    q = require('q');
-    util = require('./util.js');
+var Instapaper = require('instapaper')
+  , _          = require('lodash')
+  , q          = require('q')
+  , util       = require('./util.js')
+;
 
 var apiUrl = 'https://www.instapaper.com/api/1.1';
 
@@ -13,34 +14,6 @@ var pickOutputs = {
 };
 
 module.exports = {
-
-    /**
-     * Authorize module.
-     *
-     * @param dexter
-     * @returns {*}
-     */
-    authModule: function (dexter) {
-        var auth = {},
-            consumerKey = dexter.environment('instapaper_consumer_key'),
-            consumerSecret = dexter.environment('instapaper_consumer_secret'),
-
-            username = dexter.environment('instapaper_username'),
-            password = dexter.environment('instapaper_password');
-
-        if (consumerKey && consumerSecret && username && password) {
-
-            auth.consumerKey = consumerKey;
-            auth.consumerSecret = consumerSecret;
-            auth.user = username;
-            auth.pass = password;
-        } else {
-
-            this.fail('A [instapaper_consumer_key, instapaper_consumer_secret, instapaper_username, instapaper_password] environment need for this module.');
-        }
-
-        return _.isEmpty(auth)? false : auth;
-    },
     /**
      * The main entry point for the Dexter module
      *
@@ -48,35 +21,31 @@ module.exports = {
      * @param {AppData} dexter Container for all data used in this workflow.
      */
     run: function(step, dexter) {
+        var auth        = dexter.provider('instapaper').credentials()
+          , client      = Instapaper(auth.consumer_key, auth.consumer_secret, {apiUrl: apiUrl})
+          , self        = this
+          , bookmarkIds = step.input('bookmark_id')
+          , connections = []
+        ;
 
-        var auth = this.authModule(dexter),
-            client = Instapaper(auth.consumerKey, auth.consumerSecret, {apiUrl: apiUrl}),
-            bookmarkIds = step.input('bookmark_id').toArray(),
-            connections = [];
+        if (!auth) return self.fail('No instapaper auth credentials provided');
+        client.setOAuthCredentials(auth.access_token, auth.access_token_secret);
 
+        _.each(bookmarkIds,function(bookmarkId) {
+            var deferred = q.defer();
+          
+            client.bookmarks.archive(bookmarkId).then(function(bookmarks) {
+                deferred.resolve();
+            }.bind(this)).catch(function (errors) {
+                deferred.reject(errors);
+            });
 
-        console.log(step.inputs());
+            connections.push(deferred.promise);
+        });
 
-        
-        if (_.isEmpty(bookmarkIds)) 
-            return this.fail('A [bookmark_id] inputs need for this module.');
-        
-        // client.setUserCredentials(auth.user, auth.pass);
-        // connections = _.map(bookmarkIds, function (bookmarkId) {
-        //     var deferred = q.defer(),
-        //         bookmarkId = _(bookmarkId).toString().trim();
-            
-        //     client.bookmarks.archive(bookmarkId).then(function(bookmarks) {
-        //         deferred.resolve(util.pickResult(_.isArray(bookmarks)? _.first(bookmarks): bookmarks, pickOutputs));
-        //     }.bind(this)).catch(function (errors) {
-        //         deferred.reject(errors);
-        //     });
-
-        //     return deferred.promise;
-        // });
-
-        // q.all(connections).then(function(results) {
-        //     this.complete(results)
-        // }.bind(this)).fail(this.fail.bind(this));
+        q.all(connections)
+           .then(this.complete.bind(this, {}))
+           .fail(this.fail.bind(this))
+        ;
     }
 };
