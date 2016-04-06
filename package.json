@@ -8,10 +8,10 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url" : "https://github.com/rundexter/instapaper-archive-bookmark"
+    "url": "https://github.com/rundexter/instapaper-archive-bookmark"
   },
   "dependencies": {
-    "instapaper": "^1.0.0",
+    "instapaper": "^1.1.0",
     "lodash": "^3.10.1",
     "q": "^1.4.1"
   }

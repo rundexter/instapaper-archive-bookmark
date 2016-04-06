@@ -2,13 +2,14 @@
  * Metadata describing the module operation
  */
 {
-    //Required. Inputs the module expects.
     "inputs": [{
         "id": "bookmark_id",
         "title":"Bookmark ID"
     }],
-    //Required. Outputs the module emits.
     "outputs": [],
     "icon": "dex-instapaper",
-    "title": "Instapaper Archive Bookmark" /* Required.A display name for the module */
+    "title": "Instapaper Archive Bookmark",
+    "providers": [ {
+        "name": "instapaper"
+    } ]
 }
